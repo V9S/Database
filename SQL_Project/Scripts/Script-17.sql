@@ -1,0 +1,4 @@
+SELECT
+	*
+FROM
+	GAMS_CARD gc
