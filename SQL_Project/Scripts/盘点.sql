@@ -140,3 +140,5 @@ DELETE FROM gams_inventory_h ;
 
 
 DELETE FROM gams_inventory_i ;
+
+SELECT * FROM GAMS_CARD gc WHERE WHERE 

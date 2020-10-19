@@ -1,0 +1,130 @@
+SELECT
+	tt.CWHSTSDM ,
+	sum(i.zhejje)
+FROM
+	GAMS_ASSETDEPRECDETAIL i
+LEFT JOIN GAMS_CARD gc ON
+	gc.id = i.CARD_ID
+LEFT JOIN TC_TEMP tt  ON
+	gc.hangyfl = tt.ID 
+WHERE
+	i.jizqj = '202009'
+GROUP BY
+	tt.CWHSTSDM
+	
+	
+SELECT
+	gb.name AS gbname,
+	cw.name AS fyname ,
+	sum(l.zhejje) AS zhejje
+FROM
+	AssetDepreciationDetailRecord AS l
+LEFT JOIN gams_card AS card ON
+	l.cardId = card.id
+LEFT JOIN TC_TEMP tt  ON
+	gc.hangyfl = tt.ID 
+LEFT JOIN SageCaiwfylxSetting AS biz ON
+	biz.sage = card.jiaoysyfx
+LEFT JOIN biz_jy00_gams_jc_caiwfylx AS cw ON
+	biz.caiwfylx = cw.id
+WHERE
+	l.orgId = @orgid
+	AND l.jizqj = @jizqj
+GROUP BY
+	gb.name,
+	cw.name
+				 
+				 
+--国标分类
+SELECT * FROM GAMS_JC_ASSETCLASS_GB gjag WHERE gjag.NAME = '6050610';
+--国标大类
+SELECT * FROM GAMS_JC_ASSETSORT_GB gjag ;
+--国标分类(资产分类)
+SELECT *FROM GAMS_JC_ASSETCLASS gja WHERE gja.NAME = '17';
+
+--行业分类 
+SELECT classgbid FROM gams_jc_assetclass_ind; --对应国标分类
+
+SELECT maincatalog FROM gams_jc_assetclass WHERE id = '3755B5650000188147B9A586200E7538'; -- 国标分类对应国标大类
+
+SELECT * FROM gams_jc_assetsort_gb WHERE id = '3711F12FC000000192E940E7FAE32E55'; -- 国标大类
+
+CREATE TABLE tc_temp AS SELECT ID,NAME ,CLASSGBID ,TITLE FROM gams_jc_assetclass_ind ;
+
+SELECT tt.CWHSTSDM FROM TC_TEMP tt GROUP BY tt.CWHSTSDM ; 
+
+UPDATE tc_temp b SET cwhstsdm = (SELECT gjag.NAME FROM GAMS_JC_ASSETSORT_GB gjag  LEFT JOIN GAMS_JC_ASSETCLASS gja ON gja.MAINCATALOG = gjag.ID WHERE b.CLASSGBID = gja.ID);
+
+SELECT * FROM GAMS_CARD gc WHERE  gc.hangyfl = '40000C61F9453AD9828C0A4AB4FA9CC4';
+
+SELECT * FROM GAMS_JC_ASSETCLASS_IND gjai WHERE gjai.NAME = '1101';
+
+
+CREATE TABLE tc_temp AS SELECT ID,NAME ,CLASSGBID ,TITLE FROM gams_jc_assetclass_ind ;
+
+UPDATE tc_temp b SET cwhstsdm = (SELECT gjag.NAME FROM GAMS_JC_ASSETSORT_GB gjag  LEFT JOIN GAMS_JC_ASSETCLASS gja ON gja.MAINCATALOG = gjag.ID WHERE b.CLASSGBID = gja.ID);
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '07' WHERE a.NAME IN ('6050000',
+'6050100',
+'6050101',
+'6050102',
+'6050103');
+
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '10' WHERE a.NAME IN ('6050200',
+'6050201',
+'6050202',
+'6050203',
+'6050204',
+'6050205',
+'6050206',
+'605020Z');
+
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '09' WHERE a.NAME IN ('6050300');
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '12' WHERE a.NAME IN ('6050411');
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '08' WHERE a.NAME IN ('6050500');
+
+UPDATE TC_TEMP a  SET CWHSTSDM = '11' WHERE a.NAME IN ('6050400',
+'6050410',
+'6050412',
+'6050413',
+'6050414',
+'6050415',
+'6050416',
+'6050417',
+'6050418',
+'6050419',
+'605041Z',
+'6050420',
+'6050430',
+'6050431',
+'6050432',
+'6050433',
+'6050434',
+'6050435',
+'605043Z',
+'6050600',
+'6050610',
+'6050620',
+'6050630',
+'6050631',
+'6050632',
+'6050633',
+'605063Z',
+'6050700',
+'6050710',
+'6050720',
+'6050730',
+'6050740');
+
+SELECT * FROM TC_TEMP tt WHERE TT.CWHSTSDM IN ('07','08','09','10','11','12');
+
+SELECT * FROM TC_TEMP tt ;
+
+
+SELECT * FROM GAMS_JC_ASSETCLASS_IND gjai WHERE gjai.NAME = '17';
+
+SELECT * FROM GAMS_CARD gc WHERE gc.HANGYFL = '600000218DFF3AFDED331A9333726119';

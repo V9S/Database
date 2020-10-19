@@ -1,0 +1,16 @@
+SELECT * FROM GAMS_INVENTORY_H gih ;
+
+SELECT caiwrzzt FROM GAMS_CARD_TYSB gct WHERE gct.ruzxs
+
+
+SELECT * FROM gams_jc_entryform
+
+select * from gams_inspectionentry_detail a WHERE a.id = 'F18E31FFA6EB4725B2B96BF4CEEF8425';
+
+SELECT gc. FROM GAMS_CARD gc ;
+
+
+SELECT * FROM GAMS_CARD gc WHERE gc.BILLCODE = 'TY2020000983';
+
+SELECT * FROM GAMS_JC_FUNDNUMBER gjf ;
+
