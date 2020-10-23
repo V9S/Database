@@ -2,6 +2,7 @@ SELECT * FROM NP_USER nu WHERE nickname = '管峻';
 
 --王欢		2016010053
 --管峻		2009010035
+--牛健		1994000060
 
 SELECT * FROM GAMS_REIMBURSE gr WHERE gr.BILL_CODE = 'DJJZ202000001014'
 
@@ -31,6 +32,5 @@ SELECT * FROM gams_basedatametadata_mark WHERE TABLENAME = 'gams_jc_xuek';
 
 SELECT * FROM GAMS_BASEDATA_DEFINE gbd WHERE gbd.name = 'gams_jc_xuek';
 
-INSERT GAMS_BASEDATA_DEFINE values()
+INSERT INTO GAMS_BASEDATA_DEFINE values(sys_guid(),'gams_jc_xuek','学科','com.jiuqi.np.gams2.basedata.gams_jc_xuek','1')
 
-SELECT 
