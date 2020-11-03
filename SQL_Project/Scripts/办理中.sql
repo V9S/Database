@@ -1,4 +1,4 @@
-define query queryInfo(@billcode string, @businessTypeName string, @billcode_min string, @billcode_max string, @submitTime_min DATE, @submitTime_max DATE, @submiter guid, @submitdepart guid, @orgunit guid, @currentIdentity guid)
+define query queryInfo(@billcode string, @businessTypeName string, @billcode_min string, @billcode_max string, @submitTime_min DATE, @submitTime_max DATE, @submiter guid, @submitdepart guid)
 BEGIN
 	SELECT
 	tt.id AS id,
@@ -9,17 +9,13 @@ BEGIN
 	tt.submitTime AS submitTime,
 	jd.name AS submitDepartment,
 	tt.businessDataId AS businessDataId,
-	tt.businessType AS businessType,
-	tt.identityId AS identityId,
-	tt.identityName AS identityName
+	tt.businessType AS businessType
 FROM
 	(
 	SELECT
-		gwbp.id AS id, '办理中' AS state, gwbp.businessTypeName AS businessType, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, gwbp.businessDataId AS businessDataId, gwbp.submitterId AS identityId, identity.name AS identityName
+		gwbp.id AS id, '办理中' AS state, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, gwbp.businessDataId AS businessDataId, gwbp.businessTypeName AS businessType, gwbp.submitterId AS submitterId
 	FROM
 		BusinessProcessInstance AS gwbp
-	LEFT JOIN IDENTITY AS IDENTITY ON
-		gwbp.submitterId = identity.id
 	WHERE
 		gwbp.businesscode IS NOT NULL
 		AND gwbp.last = TRUE
@@ -30,16 +26,13 @@ FROM
 		AND gwbp.businesscode <= @billcode_max
 		AND gwbp.submitTime >= @submitTime_min
 		AND gwbp.submitTime <= @submitTime_max
-		AND gwbp.submitterId = @currentIdentity
 		AND gwbp.businessTypeName NOT IN ('com.jiuqi.np.gams2.business.bill.ReimbursePickingBillDefine',
 		'com.jiuqi.np.gams2.business.bill.ReimburseBillDefine')
 UNION ALL
 	SELECT
-		gwbp.id AS id, '办理中' AS state, gwbp.businessTypeName AS businessType, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, gwbp.businessDataId AS businessDataId, gwbp.submitterId AS identityId, identity.name AS identityName
+		gwbp.id AS id, '办理中' AS state, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, gwbp.businessDataId AS businessDataId, gwbp.businessTypeName AS businessType, gwbp.submitterId AS submitterId
 	FROM
 		BusinessProcessInstance AS gwbp
-	LEFT JOIN IDENTITY AS IDENTITY ON
-		gwbp.submitterId = identity.id
 	JOIN (
 		SELECT
 			max(gwbp1.id) AS idt1
@@ -62,14 +55,11 @@ UNION ALL
 		AND gwbp.businesscode <= @billcode_max
 		AND gwbp.submitTime >= @submitTime_min
 		AND gwbp.submitTime <= @submitTime_max
-		AND gwbp.submitterId = @currentIdentity
 UNION ALL
 	SELECT
-		gwbp.id AS id, '办理中' AS state, gwbp.businessTypeName AS businessType, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, gwbp.businessDataId AS businessDataId, gwbp.submitterId AS identityId, identity.name AS identityName
+		gwbp.id AS id, '办理中' AS state, gwbp.businessObjectName AS businessTypeName, gwbp.businesscode AS billcode, gwbp.submitTime AS submitTime, props.master AS businessDataId, gwbp.businessTypeName AS businessType, gwbp.submitterId AS submitterId
 	FROM
 		BusinessProcessInstance AS gwbp
-	LEFT JOIN IDENTITY AS IDENTITY ON
-		gwbp.submitterId = identity.id
 	JOIN (
 		SELECT
 			max(gwbp1.id) AS idt1
@@ -93,10 +83,9 @@ UNION ALL
 		AND gwbp.businesscode >= @billcode_min
 		AND gwbp.businesscode <= @billcode_max
 		AND gwbp.submitTime >= @submitTime_min
-		AND gwbp.submitTime <= @submitTime_max
-		AND gwbp.submitterId = @currentIdentity) AS tt
+		AND gwbp.submitTime <= @submitTime_max) AS tt
 LEFT JOIN user_identity AS ui ON
-	ui.identityId = tt.identityId
+	ui.identityId = tt.submitterId
 LEFT JOIN UserOrgRelation AS uor ON
 	ui.userId = uor.userId
 LEFT JOIN gams_jc_personnel AS jp ON
@@ -107,7 +96,8 @@ WHERE
 	1 = 1
 	AND jp.id = @submiter
 	AND jd.id = @submitdepart
-	AND uor.orgId = @orgunit
+END",
 
-	SELECT * FROM AUTHZ_USER_IDENTITY aui ;
-	SELECT * FROM GAMS_USER_ORG_REL guor ;
+SELECT * FROM GAMS2_WORKFLOW_BUS_PROCESS gwbp ;
+
+SELECT * FROM GAMS_JC_PERSONNEL gjp ;

@@ -1,109 +1,98 @@
 SELECT
-	c.id,
-	c.version,
-	c.creator,
-	c.createtime,
-	c.auditstate,
-	hangyfl.carddefinename AS billdefine,
-	c.objectid,
-	c.orgunit,
-	c.cardstate,
-	c.rebillid,
-	c.yewxlh,
-	c.billcode,
-	c.zicmc,
+	card.id,
+	card.objectid AS cardobjectid,
+	card.caiwrzrq AS caiwrzrq,
+	lock.bizdes AS bizdes,
 CASE
-		WHEN loc.bizdes IS NULL THEN to_char('在用')
-		WHEN to_char(loc.bizdes) = to_char('资产调拨(部门间)') THEN to_char('资产调拨中(部门间)')
-		ELSE to_char(loc.bizdes) + to_char('中')
+		WHEN lock.bizdes IS NULL THEN to_char('在用')
+		ELSE to_char(lock.bizdes) + to_char('中')
 	END AS state,
-	zicfl.title AS zicfl,
-	c.zicfl AS zicflid,
-	hangyfl.title AS hangyfl,
-	jiaoysyfx.title AS jiaoysyfx,
-	c.danj,
-	c.shul,
-	c.mianj,
-	jiazlx.title AS jiazlx,
-	c.jiaz AS jiaz,
-	c.caizxzj,
-	c.pinp AS pinp,
-	c.guigxh AS guigxh,
-	c.feiczxzj,
-	qudfs.title AS qudfs,
-	c.qudrq,
-	c.jizrq,
-	ruzxs.title AS ruzxs,
-	c.caiwrzrq,
-	c.yujsmzl,
-	c.kuaijpzh,
-	shiybm.name AS shiybm,
-	shiyr.name AS shiyr,
-	cunfdd.name AS cunfdd,
-	zhejzt.title AS zhejzt,
-	zicgs.name AS zicgs,
-	c.yansrkdh,
-	c.beiz,
-	c.yuanzcbh AS yuanzcbh,
-	c.shiybm_old,
-	c.cunfdd_old,
-	c.datasource AS datasource,
-	c.yuansjzrq AS yuansjzrq,
-	c.printnum
+	card.yujsmzl AS yujsmzl,
+	(
+		CASE WHEN lock.id IS NULL THEN 0
+		WHEN lock.id IS NOT NULL THEN 1
+	END) AS isLock,
+	(
+		CASE WHEN ruzxs.name = '02' THEN '未入账卡片不允许做校内处置申请'
+		ELSE ''
+	END ) AS customLockMessage,
+	(
+		CASE WHEN ruzxs.name = '02' THEN 1
+		ELSE 0
+	END ) AS customIsLock,
+	card.id AS KEY,
+	card.zicmc AS zicmc,
+	card.billcode AS billcode,
+	card.zicfl AS zicfl,
+	card.hangyfl AS hangyfl,
+	card.shiyzk AS shiyzk,
+	card.shiybm AS shiybm,
+	card.shiyr AS shiyr,
+	card.jiaoysyfx AS jiaoysyfx,
+	card.shul,
+	card.jiaz,
+	card.jiazlx AS jiazlx,
+	card.kuaijpzh,
+	card.guigxh,
+	card.ruzxs AS ruzxs,
+	card.jizrq,
+	card.qudfs AS qudfs,
+	card.qudrq,
+	card.cunfdd AS cunfdd,
+	card.beiz
 FROM
-	gams_card AS c
-LEFT JOIN (
-	SELECT
-		t.id, t.cardobjectid, t.bizDes
-	FROM
-		CardLock AS t, (
-		SELECT
-			max(l.id) AS id
-		FROM
-			CardLock AS l
-		WHERE
-			l.cardobjectid IN (
-			SELECT
-				GAL_TEMP_GAMS_QUERY2.TUUID
-			FROM
-				GAL_TEMP_GAMS_QUERY2 AS GAL_TEMP_GAMS_QUERY2
-			WHERE
-				GAL_TEMP_GAMS_QUERY2.BUSINESSTYPE = @GAL_TEMP_GAMS_QUERY2)
-		GROUP BY
-			l.cardobjectid) AS t2
-	WHERE
-		t.id = t2.id) AS loc ON
-	loc.cardobjectid = c.objectid
-LEFT JOIN gams_jc_entryform AS ruzxs ON
-	ruzxs.id = c.ruzxs
-LEFT JOIN gams_jc_assetclass AS zicfl ON
-	zicfl.id = c.zicfl
-LEFT JOIN gams_jc_assetclass_ind AS hangyfl ON
-	hangyfl.id = c.hangyfl
-LEFT JOIN biz_jy00_gams_jc_jiaoyusage AS jiaoysyfx ON
-	jiaoysyfx.id = c.jiaoysyfx
-LEFT JOIN gams_jc_valuetype AS jiazlx ON
-	jiazlx.id = c.jiazlx
-LEFT JOIN gams_jc_gainmanner AS qudfs ON
-	qudfs.id = c.qudfs
-LEFT JOIN gams_jc_department AS shiybm ON
-	shiybm.id = c.shiybm
-LEFT JOIN gams_jc_personnel AS shiyr ON
-	shiyr.id = c.shiyr
-LEFT JOIN gams_jc_depositary AS cunfdd ON
-	cunfdd.id = c.cunfdd
-LEFT JOIN gams_jc_deprecstate AS zhejzt ON
-	zhejzt.id = c.zhejzt
-LEFT JOIN gams_jc_zicgs AS zicgs ON
-	zicgs.id = c.zicgs
+	gams_card card
+LEFT JOIN CardLock LOCK ON
+	lock.cardobjectid = card.objectid
+LEFT JOIN gams_jc_entryform ruzxs ON
+	ruzxs.id = card.ruzxs
 WHERE
-	c.id IN (
+	1 = 1
+	AND (card.objectid IN (
 	SELECT
-		GAL_TEMP_GAMS_QUERY.TUUID
+		cardobjectid
 	FROM
-		GAL_TEMP_GAMS_QUERY AS GAL_TEMP_GAMS_QUERY
+		cardlock
 	WHERE
-		GAL_TEMP_GAMS_QUERY.BUSINESSTYPE = @GAL_TEMP_GAMS_QUERY)
-ORDER BY
-	c.billcode
-END ",
+		cardobjectid IS NOT NULL)
+	OR ruzxs.name = '02')
+	AND card.auditstate = 2
+	AND card.jiaoysyfx IN (:? jiaoysyfx)
+	AND card.id NOT IN (:? idList)
+	AND card.orgunit = CURRORGID()
+	AND card.billcode LIKE :? billcode
+	AND card.billcode >= :? billCode_min
+	AND card.billcode <= :? billCode_max
+	AND card.billcode IN (:? billcodes)
+	AND card.yuanzcbh IN (:? yuanzcbhs)
+	AND card.yuanzcbh LIKE :? yuanzcbh
+	AND card.yuanzcbh >=:? yuanzcbh_min
+	AND card.yuanzcbh <=:? yuanzcbh_max
+	AND card.zicmc LIKE :? zicmc
+	AND truncday(card.qudrq) >= truncday(:? qudrq_min)
+	AND truncday(card.qudrq)<= truncday(:? qudrq_max)
+	AND truncday(card.jizrq) >= truncday(:? jizrq_min)
+	AND truncday(card.jizrq)<= truncday(:? jizrq_max)
+	AND truncday(card.caiwrzrq) >= truncday(:? caiwrzrq_min)
+	AND truncday(card.caiwrzrq) <= truncday(:? caiwrzrq_max)
+	AND card.cardstate LIKE '0%'
+	AND card.shixrq>getdate()
+	AND card.jiaz > :? jiaz_min
+	AND card.shiybm IN (:? shiybm)
+	AND card.shiyr IN (:? shiyr)
+	AND card.cunfdd IN (:? cunfdd)
+	AND card.jiaz <= :? jiaz_max
+	AND card.shul >:? shul_min
+	AND card.shul <=:? shul_max
+	AND card.guigxh LIKE :? guigxh
+	AND COALESCE(lock.lockerbiztype,
+	'在用') LIKE :? bizstate
+	
+	SELECT * FROM GAMS_INSPECTIONENTRY gi WHERE BILL_CODE = 'YSSZ2019000003'
+	
+	SELECT * FROM GAMS2_WORKFLOW_COMMON_TASK gwct WHERE gwct.BUSINESS_DATA_ID = '5e8ce2eb9f2349b8b549b2be7b845693';
+
+SELECT * FROM GAMS2_WORKFLOW_BUS_PROCESS gwbp ;
+
+SELECT * FROM GAMS2_WORKFLOW_PROCESS_INS gwpi ;
+	
