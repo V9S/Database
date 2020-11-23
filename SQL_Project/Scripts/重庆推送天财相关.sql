@@ -8,7 +8,8 @@ DELETE FROM GAMS_INTERFACE_LOG;
 
 SELECT * FROM GAMS_INTERFACE_LOG gil ;
 
-SELECT * FROM 
+SELECT * FROM gams_jc_cwparam;
+
 select * from gams_jc_cwparam_bak;
 INSERT INTO gams_jc_cwparam  select * from gams_jc_cwparam_bak WHERE name = 'ZCGR_PUSH';
 select * from gams_jc_cwparam WHERE title LIKE '%ÍË¿â%';
@@ -90,3 +91,5 @@ set @sql='kill '+cast(@spid  as varchar)
 exec(@sql)
 
 SELECT * FROM GAMS_INSPECTIONENTRY_DETAIL gid 
+
+SELECT * FROM GAMS_JC_DEPOSITARY gjd ;

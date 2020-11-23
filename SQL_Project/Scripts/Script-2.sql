@@ -1,0 +1,1 @@
+SELECT * FROM gams_card;
