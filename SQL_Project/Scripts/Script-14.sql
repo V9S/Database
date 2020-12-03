@@ -1,0 +1,3 @@
+delete from gams_card  WHERE BILLCODE = '19960027S'; 
+
+SELECT * FROM GAMS2_WORKFLOW_DEFINITION gwd ;
