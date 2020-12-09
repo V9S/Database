@@ -48,6 +48,9 @@ SELECT yujnxsmzl FROM GAMS_CARD_JJYJZJ gcj ;
 
 SELECT gc.yujnxsmzl FROM GAMS_CARD gc;
 
+SELECT ga.PUSHMAKE ,ga.DATASOURCE,ga.jizrq,ga.* FROM GAMS_ASSETDISPOSEREG ga ;
+
+
 4、处置 	zc_xx：国标分类、行业分类、单价、数量、金额、使用年限、项目编号
   		cz_zjcl:项目编号、累计折旧、资产净值、srje
   		
