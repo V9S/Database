@@ -27,3 +27,9 @@ UPDATE gams_jc_repaireper SET CREATETIME = (SELECT CREATETIME  FROM GAMS_JC_PERS
 SELECT * FROM gams_jc_assetclass_ind WHERE NAME = '05010102';
 
 SELECT cunfdd_new FROM GAMS_ASSETCHANGE ga ;
+
+SELECT shiyr_new FROM GAMS_ASSETCHANGE_DETAIL gad ;
+
+SELECT * FROM gams_jc_fundsaccounts gop 
+
+SELECT * FROM GAMS_JC_DEPARTMENT gjd ;
