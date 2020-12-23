@@ -33,3 +33,6 @@ DELETE FROM  gams_jc_zicgs a WHERE a.ORGID <> (SELECT ID FROM ORG o2);
 DELETE FROM  gams_unitdatatrans_detail a WHERE a.ORGID <> (SELECT ID FROM ORG o2);
 
 DELETE FROM  gams_card_fw a WHERE a.ORGUNIT <> (SELECT ID FROM ORG o2);
+
+
+

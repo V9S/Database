@@ -1,7 +1,6 @@
 SELECT 
---650494
---	sum(ljzj.yuezje) AS yuezje
-count(ljzj.a )
+	sum(ljzj.yuezje) AS yuezje
+--count(ljzj.a )
 FROM
 	gams_card card
 JOIN (
@@ -35,9 +34,10 @@ WHERE
 	card.caiwrzrq <= to_date('2020-10-31 23:59:59', 'yyyy-mm-dd HH24:mi:ss')
 	AND 
 	card.yewxlh = temp.yewxlh AND ljzj.a  IN (SELECT detail.id FROM GAMS_ASSETDEPRECDETAIL detail WHERE detail.jizqj = 202010);
+5658129.24
 
 
-
+--ÕÛ¾ÉÍÆËÍ---5658188.90
 
 	
 SELECT
