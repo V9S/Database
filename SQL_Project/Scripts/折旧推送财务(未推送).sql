@@ -55,4 +55,4 @@ SELECT * FROM GAMS_INSPECTIONENTRY gi WHERE GI.ID = 'A5BAB072CEC84DFEB467620D89B
 
 select a.id ,b.cunfdd from gams_acceptanceuse a LEFT JOIN gams_card b  ON a.CARDID  = b.ID where a.lingyzt=0 and a.id='B7FBD15E36534BD09CB05C4CCB42BD98';
 
-select a.id ,b.cunfdd from gams_acceptanceuse  a, gams_card b where a.cardid=b.id and a.lingyzt=0 and a.id='B7FBD15E36534BD09CB05C4CCB42BD98';
+select a.id ,b.cunfdd from gams_acceptanceuse  a, gams_card b where a.cardid=b.id and a.lingyzt=0 and a.id='64C4C2F3C2AF46B9A8C8BF891B6319D3';
