@@ -1,0 +1,47 @@
+--财务推送
+SELECT
+	sum(aa.zhejje) AS zhejje
+FROM
+	(
+	SELECT
+		biz.id AS billid,
+		biz.ORG_ID AS orgid,
+		to_char('com.jiuqi.np.gams2.depreciation.AssetDepreciationBill') AS billdefine,
+		biz.jizqj AS jizqj,
+		sum(i.leijzj)+ sum(i.benczje) AS leijzj,
+		count(i.id) AS zhejsl
+	FROM
+		GAMS_ASSETDEPREC_H  biz
+	LEFT JOIN GAMS_ASSETDEPREC_I  i ON
+		biz.id = i.MASTER_ID 
+	WHERE
+		biz.BILL_STATE = 2
+		AND (biz.pushmake IS NULL
+		OR biz.pushmake = 0)
+		AND (biz.caiwrzrq IS NULL)
+		AND (biz.kuaijpzh IS NULL
+		OR biz.kuaijpzh = '')
+	GROUP BY
+		biz.id,
+		biz.ORG_ID ,
+		biz.jizqj)  bb
+LEFT JOIN GAMS_ASSETDEPRECDETAIL  aa ON
+	bb.orgid = aa.ORG_ID 
+--	AND bb.jizqj = aa.jizqj
+ 	AND bb.JIZQJ = '202011'
+ 	AND aa.JIZQJ = '202011';
+ 
+ 
+ 
+ 
+ 
+ --6062759.42	49135
+ SELECT  * FROM GAMS_ASSETDEPRECDETAIL  aa WHERE aa.JIZQJ = '202011'AND  aa.CARD_ID NOT IN (SELECT i.CARD_ID FROM GAMS_ASSETDEPREC_I i LEFT JOIN  GAMS_ASSETDEPREC_H  h ON h.ID = i.MASTER_ID WHERE h.JIZQJ = '202011') ;
+ --6064192		49117
+SELECT * FROM GAMS_ASSETDEPREC_I i LEFT JOIN  GAMS_ASSETDEPREC_H  h ON h.ID = i.MASTER_ID WHERE h.JIZQJ = '202011';
+
+SELECT * FROM GAMS_CARD GC WHERE GC.ID IN ('6ED57E29C000046151F87E9AE1F6EF54','6ED57E2F800000813F3176EB1E4EB32D','6ED57E0C4000014155BBDF97DA3C9956','6ED57E0C400002012FD7CBF1C958BD83') ;
+
+SELECT COUNT(1), COMMENTS FROM GAMS_ASSETDEPRECDETAIL GROUP BY COMMENTS ;
+
+SELECT * FROM GAMS_ASSETDEPRECDETAIL WHERE  COMMENTS  = '拆分新增' OR COMMENTS = '拆分减少';
