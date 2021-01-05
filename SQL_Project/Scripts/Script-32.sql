@@ -46,8 +46,8 @@ LEFT JOIN (
 	SELECT
 		card.sortgb AS sortgb,
 		card.jiaoysyfx AS jiaoysyfx,
-		sum(card.shul) AS shul,
-		sum(card.jiaz) AS jiaz,
+		sum(gc.shul) AS shul,
+		sum(gc.jiaz) AS jiaz,
 		sum(ljzj.yuezje) AS yuezje,
 		sum(ljzj.leijzj) AS leijzj
 	FROM
@@ -78,6 +78,7 @@ LEFT JOIN (
 		GROUP BY
 			detail.cardObjectId) AS ljzj ON
 		card.objectid = ljzj.cardobjectid
+	LEFT JOIN GAMS_CARD gc ON gc.id = card.id AND card.CARDSTATE LIKE '0%'
 	WHERE
 		card.orgunit IN (@orgunit)
 		AND card.auditstate = 2

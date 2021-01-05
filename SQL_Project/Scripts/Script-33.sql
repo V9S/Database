@@ -46,8 +46,8 @@ LEFT JOIN (
 	SELECT
 		card.sortgb AS sortgb,
 		card.jiaoysyfx AS jiaoysyfx,
-		sum(card.shul) AS shul,
-		sum(card.jiaz) AS jiaz,
+		sum(gc.shul) AS shul,
+		sum(gc.jiaz) AS jiaz,
 		sum(ljzj.yuezje) AS yuezje,
 		sum(ljzj.leijzj) AS leijzj
 	FROM
@@ -60,8 +60,8 @@ LEFT JOIN (
 			gams_card AS c
 		WHERE
 			c.orgunit IN (@orgunit)
-			AND c.caiwjzrq IS NOT NULL
-			AND c.caiwjzrq <= @endTime
+			AND c.jizrq IS NOT NULL
+			AND c.jizrq <= @endTime
 		GROUP BY
 			c.objectid) AS temp ON
 		card.objectid = temp.objectid
@@ -78,11 +78,18 @@ LEFT JOIN (
 		GROUP BY
 			detail.cardObjectId) AS ljzj ON
 		card.objectid = ljzj.cardobjectid
+	LEFT JOIN GAMS_CARD gc ON
+		gc.id = card.id
+		AND card.CARDSTATE LIKE '0%'
 	WHERE
 		card.orgunit IN (@orgunit)
 		AND card.auditstate = 2
-		AND card.cardstate LIKE '0%'
-		AND card.caiwrzrq <= @endTime
+		AND (card.cardstate LIKE '0%'
+		OR (card.cardstate = '12'
+		AND card.id NOT IN ('3ED8C10884014C2C92752DF67F71BC3C',
+		'EFAC241ED2294E709395226D25A85DEE',
+		'6D88993B901C469ABB98812B4EEF6DAB')))
+		AND card.jizrq <= @endTime
 		AND card.yewxlh = temp.yewxlh
 	GROUP BY
 		card.sortgb,
@@ -98,5 +105,3 @@ GROUP BY
 ORDER BY
 	sortgb.name
 END
-
-
