@@ -1,62 +1,43 @@
-SELECT *FROM GAMS_ASSETUNITACCPERREC
+UPDATE NP_PASSWORD SET PASSWORD = 'e10adc3949ba59abbe56e057f20f883e';
 
-SELECT * FROM NP_USER nu WHERE nu.NICKNAME = '王欢';
+SELECT * FROM ORG o ;
 
-INSERT INTO GAMS_ASSETUNITACCPERREC values(sys_guid(),'490C97862000002111944D86C42AEEBB',NULL,'',2021,1,2)
-
-SELECT * FROM GAMS_JC_FUNDNUMBER gjf ;
+SELECT CAIWRZRQ ,KUAIJPZH FROM GAMS_CARD gcj2 gcj WHERE gcj.BILLCODE = 'TY2020000085' AND gcj.ORGUNIT = '6E35BC1F80000001F6D62BD49F8EC9CC' AND gcj.ruzxs = '37B5592B60000021761FD48A8304C546';
 
 
+SELECT count(1) FROM GAMS_CARD gcj WHERE  gcj.ORGUNIT = '6E35BC1F80000001F6D62BD49F8EC9CC' AND gcj.ruzxs <> '37B5592B60000021761FD48A8304C546';
 
-DECLARE
-	CURSOR c1 IS
-SELECT
-	id
-FROM
-	GAMS_JC_PERSONNEL ;
-BEGIN
-	FOR n1 IN c1
-LOOP
-		INSERT
-	INTO
-	GAMS_JC_FUNDNUMBER
-VALUES (n1.ID,
-'1',
-'1',
-n1.ID,
-'测试经费',
-'CSJF',
-'/56681442-87d1-4d3d-928b-cbca60e56972',
-NULL,
-'项目管理',
-n1.ID,
-'2020',
-1,
-'屈峰',
-to_date('2021-01-01 00:00:00', 'yyyy-mm-dd HH24:mi:ss'),
-NULL,
-NULL,
-NULL,
-1,
-'490C97862000002111944D86C42AEEBB',
-'100000',
-n1.ID,
-'06010',
-'航空学院（一院）');
-END
-LOOP;
 
-COMMIT;
-END;
 
-SELECT *  FROM GAMS_JC_FUNDNUMBER gjf WHERE GJF.CREATETIME  = to_date('2021-01-01 00:00:00', 'yyyy-mm-dd HH24:mi:ss');
+select a.table_name,
 
-DELETE FROM GAMS_JC_FUNDNUMBER gjf WHERE GJF.CREATETIME  = to_date('2021-01-01 00:00:00', 'yyyy-mm-dd HH24:mi:ss');
+       a.num_rows,  --  记录数
 
-alter index FUNNDNUMBER_CODE_IDX rebuild ONLINE
+        Round (a.avg_row_len * a.num_rows /  1024 /  1024 /  0.9 ,  4 )  as need_size,  --  数据大小
 
-select height,DEL_LF_ROWS/LF_ROWS from GAMS_JC_FUNDNUMBER;
+        Round (a.blocks *  8 /  1024 ,  4 )  as real_size,  --  实际占用空间  ,
 
-drop index FUNNDNUMBER_CODE_IDX;
+        Round (a.blocks *  8 /  1024 - a.avg_row_len * a.num_rows /  1024 /  1024 /  0.9 ,  4 )  as recover_mb  --  浪费空间大小
 
-create index FUNNDNUMBER_CODE_IDX on GAMS_JC_FUNDNUMBER (code);
+   from dba_tables a
+
+  where a.blocks *  8 /  1024 - a.avg_row_len * a.num_rows /  1024 /  1024 /  0.9 >  50
+
+    and a.owner =  'CQDZGCZYXY_ZCGL'
+
+  order by recover_mb  desc ;
+  
+ SELECT * FROM gams_jc_valuetype;
+
+SELECT * FROM ORG o ;
+ 
+SELECT gjv.TITLE,COUNT(1) FROM GAMS_CARD gc  LEFT JOIN GAMS_JC_VALUETYPE gjv ON gc.JIAZLX = gjv.ID WHERE gc.ORGUNIT = '6E35BC1F80000001F6D62BD49F8EC9CC' GROUP BY gjv.TITLE ;
+
+SELECT gc.shiy FROM GAMS_CARD gc WHERE gc.BILLCODE = 'TY2014001088';
+
+SELECT * FROM GAMS_JC_VALUETYPE;
+
+SELECT * FROM GAMS_JC_GAINMANNER ,GAMS_JC_VALUETYPE ;
+
+
+SELECT * FROM GAMS_JC_GAINMANNER LEFT JOIN GAMS_JC_VALUETYPE ON 1=1;
