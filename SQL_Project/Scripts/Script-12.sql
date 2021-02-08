@@ -1,67 +1,49 @@
-define query queryInfo(@orgunit guid,
-@sortgb guid,
-@hangydl guid,
-@jizrq_min DATE,
-@jizrq_max DATE,
-@zicfl guid,
-@hangyfl guid,
-@jiaoysyfx guid,
-@shiybm guid,
-@shiyr guid,
-@cunfdd guid,
-@zicgs guid,
-@nature string,
-@nature2 string,
-@nature3 string,
-@biztype1 string,
-@biztype2 string,
-@biztype3 string)
-BEGIN
-	SELECT
-	c.id AS id,
-	c.objectid AS objectid,
-	c.billcode AS billcode,
-	c.zicmc AS zicmc,
-	c.zicfl AS zicfl,
-	c.hangyfl AS hangyfl,
-	c.jizrq AS jizrq,
-	COALESCE(ch.shul_z, 0) AS shulz,
-	COALESCE(ch.mianj_z, 0) AS mianjz,
-	COALESCE(ch.jiaz_z, 0) AS jiazz,
-	c.jiaoysyfx AS jiaoysyfx,
-	c.shiybm AS shiybm,
-	c.shiyr AS shiyr,
-	c.cunfdd AS cunfdd,
-	c.zicgs AS zicgs,
-	c.shiyzk AS shiyzk,
-	c.ruzxs AS ruzxs,
-	c.sortgb AS sortgb,
-	c.hangydl AS hangydl,
-	c.beiz AS beiz
+SELECT * FROM GAMS_JC_FUNDNUMBER gjf ;
+
+
+DECLARE
+	CURSOR c1 IS
+SELECT
+	id
 FROM
-	gams_card_change AS ch
-LEFT JOIN gams_card AS c ON
-	ch.cardid = c.id
-WHERE
-	c.cunfdd IN (@cunfdd)
-	AND c.shiyr IN (@shiyr)
-	AND c.shiybm IN (@shiybm)
-	AND c.zicgs IN (@zicgs)
-	AND c.hangyfl IN (@hangyfl)
-	AND c.zicfl IN (@zicfl)
-	AND c.jiaoysyfx IN (@jiaoysyfx)
-	AND truncday(ch.jizrq) >= truncday(@jizrq_min)
-	AND truncday(ch.jizrq) <= truncday(@jizrq_max)
-	AND (COALESCE(ch.shul_z, 0) <> 0
-	OR COALESCE(ch.mianj_z, 0) <> 0
-	OR COALESCE(ch.jiaz_z, 0) <> 0)
-	AND ch.nature = @nature
-	AND ch.biztype <> @biztype1
-	AND ch.biztype = @biztype2
-	AND (ch.nature IN (@nature2)
-	OR (ch.nature = @nature3
-	AND ch.biztype = @biztype3))
-	AND ch.sortgb = @sortgb
-	AND ch.hangydl = @hangydl
-	AND ch.org = @orgunit
-END ",
+	GAMS_JC_PERSONNEL ;
+BEGIN
+	FOR n1 IN c1
+LOOP
+		INSERT
+	INTO
+	GAMS_JC_FUNDNUMBER
+VALUES(sys_guid(),
+1,
+1,
+n1.id,
+'TEST',
+'TEST',
+'/56681442-87d1-4d3d-928b-cbca60e56972',
+NULL ,
+'项目管理',
+n1.id,
+'2021',
+1,
+'曲风',
+null,
+NULL,
+NULL,
+NULL,
+1,
+'490C97862000002111944D86C42AEEBB',
+25000,
+'5120200285',
+'06010',
+'航空学院（一院）');
+END
+LOOP;
+
+COMMIT;
+END;
+
+SELECT COUNT(1) ,CODE FROM GAMS_JC_FUNDNUMBER gjf GROUP BY CODE ORDER BY count(1) desc;
+
+SELECT * FROM GAMS_JC_FUNDNUMBER gjf WHERE gjf.CODE = '9AA359A50D334AEF97DDAD4A03BFDB2C';
+
+DELETE FROM GAMS_JC_FUNDNUMBER gjf 
