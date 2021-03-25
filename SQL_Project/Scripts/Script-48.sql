@@ -9,59 +9,9 @@ CASE
 	COALESCE(qic.qicje, 0)   "期初金额",
 CASE
 		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqxz.benqxzsl, 0))
-	END   benqxzsl,
-	COALESCE(benqxz.benqxzje, 0)   benqxzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqzj.benqzzsl, 0))
-	END   benqzzsl,
-	COALESCE(benqzj.benqzzje, 0)   benqzzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(chaifxz.chaifxzsl, 0))
-	END   chaifxzsl,
-	COALESCE(chaifxz.chaifxzje, 0)   chaifxzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(fenlbdxz.fenlbdxzsl, 0))
-	END   fenlbdxzsl,
-	COALESCE(fenlbdxz.fenlbdxzje, 0)   fenlbdxzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benntk.benntkxzsl, 0))
-	END   benntkxzsl,
-	COALESCE(benntk.benntkxzje, 0)   benntkxzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
 		ELSE to_char(COALESCE(benqxz.benqxzsl, 0) + COALESCE(chaifxz.chaifxzsl, 0) + COALESCE(benqzj.benqzzsl, 0) + COALESCE(fenlbdxz.fenlbdxzsl, 0) + COALESCE(benntk.benntkxzsl, 0))
 	END   "本期新增合计数量",
 	(COALESCE(benqxz.benqxzje, 0) + COALESCE(chaifxz.chaifxzje, 0) + COALESCE(benqzj.benqzzje, 0) + COALESCE(fenlbdxz.fenlbdxzje, 0) + COALESCE(benntk.benntkxzje, 0))   "本期新增合计金额",
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqzj.benqjzsl, 0))
-	END   benqjzsl,
-	COALESCE(benqzj.benqjzje, 0)   benqjzje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqbf.benqbfsl, 0))
-	END   benqbfsl,
-	COALESCE(benqbf.benqbfje, 0)   benqbfje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqtk.benqtksl, 0))
-	END   benqtksl,
-	COALESCE(benqtk.benqtkje, 0)   benqtkje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(chaifjs.chaifjssl, 0))
-	END   chaifjssl,
-	COALESCE(chaifjs.chaifjsje, 0)   chaifjsje,
-CASE
-		WHEN guobdl.name = '01' THEN '— —'
-		ELSE to_char(COALESCE(benqjsqt.benqjsqtsl, 0))
-	END   benqjsqtsl,
-	COALESCE(benqjsqt.benqjsqtje, 0)   benqjsqtje,
 CASE
 		WHEN guobdl.name = '01' THEN '— —'
 		ELSE to_char(COALESCE(benqzj.benqjzsl, 0) + COALESCE(benqbf.benqbfsl, 0) + COALESCE(benqtk.benqtksl, 0) + COALESCE(chaifjs.chaifjssl, 0) + COALESCE(benqjsqt.benqjsqtsl, 0))
