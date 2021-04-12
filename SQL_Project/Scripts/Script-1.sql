@@ -1,13 +1,22 @@
-INSERT INTO zc_ywlx VALUES ('YSSZ2020000465', '11', '资产购入', '郑博', '财务管理系', '1', '20201215', '1', '苏曼璐', '制单成功,制单人:苏曼璐', '20201215', '01', '01997', ' ', '2020-12-15 11:27:18', '2020-12-11 09:15:19', 'com.jiuqi.np.gams2.business.bill.InspectionEntryBillDefine', '5f2e585f-d994-4ccf-b095-2627164ff9bc', '', '', '', '', '', '', .00, .00, .00, .00, .00, NULL, NULL, NULL, '2020-12-11 09:15:19'); GO
+SELECT * FROM ORG o ;
 
+SELECT * FROM ORG_T_ADMIN ota ;
 
-INSERT INTO [dbo].[zc_ywlx] VALUES (N'YSSZ2020000465', N'11', N'资产购入', N'郑博', N'财务管理系', N'1', N'20201215', N'1', N'苏曼璐', N'制单成功,制单人:苏曼璐', N'20201215', N'01', N'01997', N' ', N'2020-12-15 11:27:18', N'2020-12-11 09:15:19', N'com.jiuqi.np.gams2.business.bill.InspectionEntryBillDefine', N'5f2e585f-d994-4ccf-b095-2627164ff9bc', N'', N'', N'', N'', N'', N'', N'.00', N'.00', N'.00', N'.00', N'.00', NULL, NULL, NULL, N'2020-12-11 09:15:19')
+CREATE TABLE ORG_T_ADMINAS SELECT * FROM ORG_T_ADMIN ota ;
 
+DD95C1C7FB194DD88EDAC38F0A92BFAF
 
-SELECT * FROM GAMS_JC_TCJKCONFIG gjt ;
+878CC24383FF4EFCAB649AFC6C8AF20D
 
-select YWDH,PZBH,PZRQ,BILLID,BILLDEFINE from ZC_YWLX where ISSH = '1';;
+SELECT * FROM GAMS_JC_DEPARTMENT gjd WHERE gjd.ID = '6710FCC08000080120D1DA7E814A91CD';
 
-SELECT caiwrzrq ,KUAIJPZH ,PUSHMAKE FROM GAMS_INSPECTIONENTRY gi WHERE gi.BILL_CODE  = 'YSSZ2020000465';
+456E9ADEC0000001FE7C6554025F7E5E
+6F41A6ACC0000001713C9BA0EC8CA7B7
 
+SELECT * FROM GAMS_JC_PERSONNEL gjp WHERE code = '220061007';
 
+select * from processinstanceinfo p order by p.InstanceId  desc;111624
+
+select * from processinstancelog p order by p.id desc;--111935
+
+alter table processinstanceinfo AUTO_INCREMENT=111936;CQDZGCZYXYZCGL

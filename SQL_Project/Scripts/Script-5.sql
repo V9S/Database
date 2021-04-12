@@ -1,100 +1,34 @@
-define query querydata(@orgunit guid,
-@startTime DATE,
-@endTime DATE)
-BEGIN
-	SELECT
-	sortgb.title AS sortgb,
-	COALESCE(sum(gbtj.shul), 0) AS shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '1' THEN gbtj.shul ELSE 0 END), 0) AS jx_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '2' THEN gbtj.shul ELSE 0 END), 0) AS ky_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '3' THEN gbtj.shul ELSE 0 END), 0) AS xz_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '4' THEN gbtj.shul ELSE 0 END), 0) AS shhq_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '5' THEN gbtj.shul ELSE 0 END), 0) AS sc_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '6' THEN gbtj.shul ELSE 0 END), 0) AS jskf_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '7' THEN gbtj.shul ELSE 0 END), 0) AS shfw_shul,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '9' THEN gbtj.shul ELSE 0 END), 0) AS qt_shul,
-	COALESCE(sum(gbtj.jiaz), 0) AS jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '1' THEN gbtj.jiaz ELSE 0 END), 0) AS jx_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '2' THEN gbtj.jiaz ELSE 0 END), 0) AS ky_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '3' THEN gbtj.jiaz ELSE 0 END), 0) AS xz_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '4' THEN gbtj.jiaz ELSE 0 END), 0) AS shhq_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '5' THEN gbtj.jiaz ELSE 0 END), 0) AS sc_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '6' THEN gbtj.jiaz ELSE 0 END), 0) AS jskf_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '7' THEN gbtj.jiaz ELSE 0 END), 0) AS shfw_jiaz,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '9' THEN gbtj.jiaz ELSE 0 END), 0) AS qt_jiaz,
-	COALESCE(sum(gbtj.yuezje), 0) AS yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '1' THEN gbtj.yuezje ELSE 0 END), 0) AS jx_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '2' THEN gbtj.yuezje ELSE 0 END), 0) AS ky_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '3' THEN gbtj.yuezje ELSE 0 END), 0) AS xz_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '4' THEN gbtj.yuezje ELSE 0 END), 0) AS shhq_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '5' THEN gbtj.yuezje ELSE 0 END), 0) AS sc_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '6' THEN gbtj.yuezje ELSE 0 END), 0) AS jskf_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '7' THEN gbtj.yuezje ELSE 0 END), 0) AS shfw_yuezje,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '9' THEN gbtj.yuezje ELSE 0 END), 0) AS qt_yuezje,
-	COALESCE(sum(gbtj.leijzj), 0) AS leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '1' THEN gbtj.leijzj ELSE 0 END), 0) AS jx_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '2' THEN gbtj.leijzj ELSE 0 END), 0) AS ky_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '3' THEN gbtj.leijzj ELSE 0 END), 0) AS xz_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '4' THEN gbtj.leijzj ELSE 0 END), 0) AS shhq_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '5' THEN gbtj.leijzj ELSE 0 END), 0) AS sc_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '6' THEN gbtj.leijzj ELSE 0 END), 0) AS jskf_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '7' THEN gbtj.leijzj ELSE 0 END), 0) AS shfw_leijzj,
-	COALESCE(sum(CASE WHEN jiaoysyfx.name = '9' THEN gbtj.leijzj ELSE 0 END), 0) AS qt_leijzj
-FROM
-	gams_jc_assetsort_gb AS sortgb
-LEFT JOIN (
-	SELECT
-		card.sortgb AS sortgb,
-		card.jiaoysyfx AS jiaoysyfx,
-		sum(card.shul) AS shul,
-		sum(card.jiaz) AS jiaz,
-		sum(ljzj.yuezje) AS yuezje,
-		sum(ljzj.leijzj) AS leijzj
-	FROM
-		gams_card AS card
-	JOIN (
-		SELECT
-			c.objectid AS objectid,
-			max(c.yewxlh) AS yewxlh
-		FROM
-			gams_card AS c
-		WHERE
-			c.orgunit IN (@orgunit)
-			AND c.caiwjzrq IS NOT NULL
-			AND c.caiwjzrq <= @endTime
-		GROUP BY
-			c.objectid) AS temp ON
-		card.objectid = temp.objectid
-	LEFT JOIN (
-		SELECT
-			detail.cardObjectId AS cardobjectid,
-			sum(CASE WHEN to_int(detail.jizqj) >= (yearof(@startTime) * 100 + monthof(@startTime)) THEN detail.zhejje ELSE 0 END) AS yuezje,
-			sum(detail.zhejje) AS leijzj
-		FROM
-			AssetDepreciationDetailRecord AS detail
-		WHERE
-			detail.orgId = @orgunit
-			AND to_int(detail.jizqj) <= (yearof(@endTime) * 100 + monthof(@endTime))
-		GROUP BY
-			detail.cardObjectId) AS ljzj ON
-		card.objectid = ljzj.cardobjectid
-	WHERE
-		card.orgunit IN (@orgunit)
-		AND card.auditstate = 2
-		AND card.cardstate LIKE '0%'
-		AND card.caiwrzrq <= @endTime
-		AND card.yewxlh = temp.yewxlh
-	GROUP BY
-		card.sortgb,
-		card.jiaoysyfx) AS gbtj ON
-	sortgb.id = gbtj.sortgb
-LEFT JOIN biz_jy00_gams_jc_jiaoyusage AS jiaoysyfx ON
-	gbtj.jiaoysyfx = jiaoysyfx.id
-WHERE
-	sortgb.name <> '08'
-GROUP BY
-	sortgb.name,
-	sortgb.title
-ORDER BY
-	sortgb.name
-END",
+--交接
+delete from gams2_workflow_opinion where billid = (select id from gams_handover where bill_code = 'ZCJJ2020000001'and org_id = '456E9EA9E0000001E75604D5761203C3');
+
+create table temp as select *  from gams2_workflow_common_task where business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001' and org_id = '456E9EA9E0000001E75604D5761203C3');
+
+delete from gams2_workflow_common_task where business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001' and org_id = '456E9EA9E0000001E75604D5761203C3');
+
+delete from gams2_task_actor where task_id in (select id from temp a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2020000001'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+
+delete from gams_task_trace where billid in (select business_data_id from temp a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2020000001'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+
+delete from gams2_workflow_bus_process where business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001' and org_id = '456E9EA9E0000001E75604D5761203C3');
+
+delete from gams2_workflow_workitem where workflow_process_ins_id in (select workflow_process_ins_id from temp a where a.business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001'and org_id = '456E9EA9E0000001E75604D5761203C3' ));
+
+delete from gams2_workflow_process_ins where id in (select workflow_process_ins_id from temp a where a.business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001'and org_id = '456E9EA9E0000001E75604D5761203C3' ));
+
+drop table temp;
+
+delete from gams_card_lock where cardobjectid in (select cardid from gams_handover_detail where master_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001'));
+
+delete from gams_bill_annex where billid = (select id from gams_handover where bill_code = 'ZCJJ2020000001');
+
+delete from gams_card_change where cardid in (select cardid from gams_handover_detail where master_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001')) AND BIZTYPE = 'com.jiuqi.np.gams2.business.bill.HandoverBillDefine';
+
+delete from gams_card_trace  where cardid in (select cardid from gams_handover_detail where master_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001')) and bizcode = 'ZCJJ2020000001';
+
+delete from gams_handover_detail where master_id = (select id from gams_handover where bill_code = 'ZCJJ2020000001');
+
+delete from gams_handover where bill_code = 'ZCJJ2020000001';
+
+SELECT *  FROM gams_card_trace gcc GROUP BY  gcc.BIZTYPE ;
+
+--校内资产处置

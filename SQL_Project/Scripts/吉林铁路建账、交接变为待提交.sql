@@ -5,9 +5,9 @@ create table delete_temp as select *  from gams2_workflow_common_task where busi
 
 delete from gams2_workflow_common_task where business_data_id = (select id from gams_inspectionentry where bill_code = 'YSSZ2021000004' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
-delete from gams2_task_actor where task_id in (select id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000004'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams2_task_actor where task_id in (select id from delete_temp a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000004'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
-delete from gams_task_trace where billid in (select business_data_id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000004'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams_task_trace where billid in (select business_data_id from delete_temp a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000004'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
 delete from gams2_workflow_bus_process where business_data_id = (select id from gams_inspectionentry where bill_code = 'YSSZ2021000004' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
@@ -53,9 +53,9 @@ create table delete_temp as select *  from gams2_workflow_common_task where busi
 
 delete from gams2_workflow_common_task where business_data_id = (select id from gams_inspectionentry where bill_code = 'YSSZ2021000006' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
-delete from gams2_task_actor where task_id in (select id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000006'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams2_task_actor where task_id in (select id from delete_temp a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000006'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
-delete from gams_task_trace where billid in (select business_data_id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000006'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams_task_trace where billid in (select business_data_id from delete_temp a where a.business_data_id=(select id from gams_inspectionentry where bill_code = 'YSSZ2021000006'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
 delete from gams2_workflow_bus_process where business_data_id = (select id from gams_inspectionentry where bill_code = 'YSSZ2021000006' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
@@ -78,9 +78,9 @@ create table temp as select *  from gams2_workflow_common_task where business_da
 
 delete from gams2_workflow_common_task where business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2021000002' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
-delete from gams2_task_actor where task_id in (select id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2021000002'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams2_task_actor where task_id in (select id from temp a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2021000002'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
-delete from gams_task_trace where billid in (select business_data_id from gams2_workflow_common_task a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2021000002'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
+delete from gams_task_trace where billid in (select business_data_id from temp a where a.business_data_id=(select id from gams_handover where bill_code = 'ZCJJ2021000002'and org_id = '456E9EA9E0000001E75604D5761203C3' ) );
 
 delete from gams2_workflow_bus_process where business_data_id = (select id from gams_handover where bill_code = 'ZCJJ2021000002' and org_id = '456E9EA9E0000001E75604D5761203C3');
 
