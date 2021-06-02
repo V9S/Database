@@ -56,7 +56,8 @@ SELECT *FROM GAMS_ACCEPTANCEUSE ga WHERE ga.BILLDEFINE = 'com.jiuqi.np.gams2.bus
 SELECT gc.* FROM GAMS_CARD gc ; --¿¨Æ¬±í
 
 SELECT * FROM GAMS_CARD_LOCK gcl ;  --¿¨Æ¬Ëø¶¨±í
-SELECT * FROM 
+DELETE  FROM GAMS_ACCEPTANCEUSE WHERE id IN (SELECT a.id FROM  GAMS_ACCEPTANCEUSE  a  left join gams_card b on a.cardid = b.id left join gams_jc_depositary c on c.id = b.cunfdd where  a.lingyzt= 0 AND a.CARDID NOT IN (SELECT id FROM GAMS_CARD gc));
+
 
 
 
